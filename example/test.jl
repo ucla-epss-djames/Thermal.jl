@@ -1,8 +1,11 @@
-include("../src/Thermal.jl")
-
-using .Thermal
-
 using DifferentialEquations
+using Plots
+
+const σ = 5.670374419e-8
+
+L_int(R, Teff, Teq) = 4π*R^2 * σ * (Teff^4 - Teq^4)
+T_eff(T1, B) = (B / T1)^-1.244
+
 
 function main()
 
@@ -18,16 +21,37 @@ function main()
     Teq = 58.1
 
     B = 0.47529
-    T = Thermal.T_eff(T1, B)
+    T = T_eff(T1, B)
 
     p = (M, R, Cp, Teq)
-    tspan = (0, 0.8*GyrToSec)
+    tspan = (0, 10*GyrToSec)
 
-    prob = ODEProblem(Thermal.dTdt, T, tspan, p, reltol=1e-10, abstol=1e-10)
-    sol = solve(prob)
+    function dTdt(T, p, t)
 
-    display(sol)
+        M = p[1]
+        R = p[2]
+        Cp = p[3]
+        Teq = p[4]
+
+        Lf = 4π*R^2 * σ * (T^4 - Teq^4)
+
+        dT = -Lf / (Cp * M)
+
+        return dT
+
+    end
+
+
+    prob = ODEProblem(dTdt, T, tspan, p)
+    sol = solve(prob, reltol=1e-8, abstol=1e-8)
+
+    T = sol[1,:]
+    t = sol.t
+    t /= GyrToSec
+
+    plot(t, T, xaxis=("Time (Gyr)"), yaxis=("T_eff (K)", (0,140)))
 
 end
+
 
 main()
