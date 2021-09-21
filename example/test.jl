@@ -26,7 +26,7 @@ function fluid()
     Teq = 58.1
 
     B = 0.47529
-    T = T_eff(T1, B)
+    Teff = T_eff(T1, B)
 
     p = (M, R, Cp, Teq, B)
     tspan = (0., 10.0*GyrToSec)
@@ -61,8 +61,10 @@ function fluid()
 
     display(T)
 
-    plot(t, T, xaxis=("Time (Gyr)"), yaxis=("T_eff (K)", (0,140)),
+    plot(t, T, color="red", xaxis=("Time (Gyr)", 0:2:10), yaxis=("T_eff (K)", (40,140)),
          size=(400,400))
+
+    savefig("plot.png")
 
 end
 
@@ -70,4 +72,4 @@ function fluidcore()
 
 end
 
-
+fluid()
