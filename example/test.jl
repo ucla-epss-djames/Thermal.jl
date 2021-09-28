@@ -2,6 +2,7 @@ using DifferentialEquations
 using Plots
 
 const σ = 5.670374419e-8
+const GPaToBar = 10000
 
 L_f(R, Teff, Teq) = 4π*R^2 * σ * (Teff^4 - Teq^4)
 T_eff(T1, B) = (T1 / B)^(1/1.244)
@@ -28,16 +29,17 @@ function fluid()
     B = 0.47529
     Teff = T_eff(T1, B)
 
-    p = (M, R, Cp, Teq, B)
+    In = (400*GPaToBar)^∇ * Cp * M
+
+    p = (In, R, Teq, B)
     tspan = (0., 10.0*GyrToSec)
 
     function dTdt(Teff, p, t)
 
-        M = p[1]
+        In = p[1]
         R = p[2]
-        Cp = p[3]
-        Teq = p[4]
-        B = p[5]
+        Teq = p[3]
+        B = p[4]
 
         # Teff = T_eff(T, B)
         # T = T_1(T,B) * (P0 * GPaToBar)^∇
@@ -45,7 +47,7 @@ function fluid()
 
         Lf = 4π*R^2 * σ * (Teff^4 - Teq^4)
 
-        dT = -Lf / (Cp * M)
+        dT = -Lf / In
 
 
         return dT
