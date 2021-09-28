@@ -29,7 +29,7 @@ function fluid()
     B = 0.47529
     Teff = T_eff(T1, B)
 
-    In = (400*GPaToBar)^∇ * Cp * M
+    In = (500*GPaToBar)^∇ * Cp * M
 
     p = (In, R, Teq, B)
     tspan = (0., 10.0*GyrToSec)
@@ -61,10 +61,9 @@ function fluid()
     t = sol.t
     t /= GyrToSec
 
-    display(T)
-
     plot(t, T, color="red", xaxis=("Time (Gyr)", 0:2:10), yaxis=("T_eff (K)", (40,140)),
-         size=(400,400))
+         size=(400,400), label="No core", dpi=300)
+    hline!([59.1], color="black", label="59.1 K")
 
     savefig("plot.png")
 
