@@ -13,8 +13,10 @@ T_1(Teff, B) = B * (Teff + 0*im)^1.244
 
 function fluid()
 
+    G = 6.67408e-11
     GyrToSec = 1e9*365*24*60*60
     GPaToBar = 1e4
+    PaToBar = 1e-5
     ∇ = 0.2585
 
     Me = 5.972e24
@@ -37,17 +39,40 @@ function fluid()
 
     mass(r) = ρ(r/R) * 4π * r^2
 
+
     function f(r)
 
-        return (ρ(r/R) * 8.314 * T1 * GPaToBar)^∇ * mass(r) * Cp
+        function planet_form(du, u, p, r)
+
+            rho = ρ(r)
+
+            m = u[2]
+
+            du[1] = -G * m * rho / r^2
+            du[2] = 4π * rho * r^2
+
+        end
+
+        rspan = (0.001, R)
+        u0 = [G*M*arr[1]/R, 0]
+
+        prob = ODEProblem(planet_form, u0, rspan)
+        sol = solve(prob)
+
+        P = sol[1,findlast(x -> x > 0, sol[1,:])]
+
+        (P * PaToBar)^∇ * mass(r) * Cp
 
     end
+
 
 
     # M = quadgk(mass, 0, R)
     # In = (500*GPaToBar)^∇ * Cp * M[1]
 
     In = quadgk(f, 0, R)
+
+    println(In)
 
     p = (In[1], R, Teq)
     tspan = (0., 10.0*GyrToSec)
@@ -78,7 +103,7 @@ function fluid()
          size=(400,400), label="No core", dpi=300)
     hline!([59.1], color="black", label="59.1 K")
 
-    # savefig("plot.png")
+    savefig("plot01.png")
 
 end
 
