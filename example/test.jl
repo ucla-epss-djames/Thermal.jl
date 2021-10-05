@@ -49,7 +49,7 @@ function fluid()
 
     In = quadgk(f, 0, R)
 
-    p = (In[1], R, Teq, B)
+    p = (In[1], R, Teq)
     tspan = (0., 10.0*GyrToSec)
 
     function dTdt(Teff, p, t)
@@ -57,7 +57,6 @@ function fluid()
         In = p[1]
         R = p[2]
         Teq = p[3]
-        B = p[4]
 
         Lf = 4π*R^2 * σ * (Teff^4 - Teq^4)
 
