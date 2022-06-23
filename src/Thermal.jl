@@ -1,6 +1,6 @@
 module Thermal
 
-using PhysicalConstants.CODATA2018: σ
+using PhysicalConstants.CODATA2014: σ
 
 using Structure: planet_eta
 
