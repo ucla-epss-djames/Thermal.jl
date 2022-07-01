@@ -2,15 +2,12 @@ module Thermal
 
 using PhysicalConstants.CODATA2014: σ
 
-using Structure: planet_eta
-
-export Bar_to_Pa, Gyr_to_sec
+export planet_eta
 export temp_effective, temp_adiabat, temp_melting
 export cc_slope, phase_boundary, visc_height, thermal_diff
 export lumin_internal, lumin_core, layer_density
 
-const Bar_to_Pa = 1e5
-const Gyr_to_sec = 1e9*365*24*60*60
+planet_eta(η0::Real, A::Real, T_m::Real, T::Real) = η0 * exp(A * (T_m/T - 1))
 
 function temp_effective(T1::Real, B::Real)
     (T1 / B)^(1/1.244)
