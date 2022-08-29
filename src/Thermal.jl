@@ -183,7 +183,8 @@ function lumin_core(T1::Real, Ti::Real, c::Real, P_c::Real, T_c::Real, ρ_c::Rea
 
     η = planet_eta(plnt.η0, plnt.A, T_m, T_c)
 
-    κ = thermal_diff(plnt.k, ρ_c, plnt.C_p)
+    # κ = thermal_diff(plnt.k, ρ_c, plnt.C_p)
+    κ = plnt.k / (3350 * 4260)
 
     K = ρ_c * plnt.α * g_c / (plnt.Ra * η * κ)
     L_c = plnt.k * K^(1/3) * ((h / c)^(4))^(1/3) * (ΔT^4)^(1/3) * 4*π*c^2
