@@ -185,13 +185,15 @@ function lumin_core(T1::Real, Ti::Real, c::Real, P_c::Real, T_c::Real, ρ_c::Rea
 
     κ = thermal_diff(plnt.k, ρ_c, plnt.C_p)
 
+    Ra = ρ_c * plnt.α * abs(ΔT) * g_c * h^3 / (κ * η)
+
     K = ρ_c * plnt.α * g_c / (plnt.Ra * η * κ)
     L_c = plnt.k * K^(1/3) * ((h / c)^(4))^(1/3) * (ΔT^4)^(1/3) * 4*π*c^2
 
     # this is value next to ∂c/∂t term in the derivation
     K = - 1 / (ρ_c * g_c * ΔΓ) * P_ratio
 
-    return (L_c=L_c, K=K, ΔT=ΔT, Γ=Γ_a/ΔΓ)
+    return (L_c=L_c, K=K, ΔT=ΔT, Γ=Γ_a/ΔΓ, Ra=Ra)
 end
 
 """
