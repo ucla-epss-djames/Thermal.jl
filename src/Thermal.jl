@@ -185,7 +185,7 @@ function lumin_core(T1::Real, Ti::Real, c::Real, P_c::Real, T_c::Real, ρ_c::Rea
 
     Ra = ρ_c * plnt.α * abs(ΔT) * g_c * abs(h)^3 / (plnt.κ * η)
 
-    K = ρ_c * plnt.α * g_c / (plnt.Ra * η * κ)
+    K = ρ_c * plnt.α * g_c / (plnt.Ra * η * plnt.κ)
     L_c = plnt.k * K^(1/3) * ((h / c)^(4))^(1/3) * (ΔT^4)^(1/3) * 4*π*c^2
 
     # this is value next to ∂c/∂t term in the derivation
